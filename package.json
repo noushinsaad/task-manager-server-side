@@ -15,6 +15,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.13.0",
+    "socket.io": "^4.8.1",
     "task-management-server-site": "file:"
   }
 }
