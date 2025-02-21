@@ -38,10 +38,17 @@ async function run() {
         const userCollection = client.db("taskManagerDb").collection("users");
         const taskCollection = client.db("taskManagerDb").collection("tasks");
 
+        app.options('*', cors());
+
+
         // JWT API
         app.post('/jwt', async (req, res) => {
             const user = req.body;
             const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+
+            res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+            res.setHeader("Access-Control-Allow-Credentials", "true");
+
             res.send({ token });
         });
 
@@ -52,7 +59,9 @@ async function run() {
 
             const token = authHeader.split(' ')[1];
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
-                if (error) return res.status(401).send({ message: "Unauthorized Access" });
+                if (error) {
+                    return res.status(401).send({ message: "Unauthorized Access" });
+                }
                 req.decoded = decoded;
                 next();
             });
@@ -103,16 +112,11 @@ async function run() {
             const filter = { createdBy: email }
             const tasks = await taskCollection
                 .find(filter)
-                .sort({ createdAt: -1 })
+                .sort({ status: 1, order: 1 })
                 .toArray();
             res.send(tasks);
         });
 
-        // Get Single Task by ID
-        app.get('/tasks/:id', verifyToken, async (req, res) => {
-            const task = await taskCollection.findOne({ _id: new ObjectId(req.params.id) });
-            res.send(task);
-        });
 
         // Update Task
         app.patch('/tasks/:id', verifyToken, async (req, res) => {
