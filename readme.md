@@ -85,8 +85,9 @@ ACCESS_TOKEN_SECRET=your_jwt_secret
 ## Authentication
 
 ```bash
-Method	Endpoint	Description
-POST	/jwt	Generate a JWT token
+| Method  | Endpoint  | Description           |
+|---------|----------|-----------------------|
+| `POST`  | `/jwt`   | Generate a JWT token  |
 ```
 
 ### Request Body (Example for /jwt)
@@ -98,8 +99,9 @@ POST	/jwt	Generate a JWT token
 
 ### User API
 ```bash
-Method	Endpoint	Description
-POST	/users	Register a new user
+| Method  | Endpoint  | Description           |
+|---------|----------|-----------------------|
+| `POST`  | `/users` | Register a new user   |
 ```
 ### Request Body (Example for /users)
 ```bash
@@ -112,11 +114,14 @@ POST	/users	Register a new user
 
 ## Task API
 ```bash
-Method	Endpoint	Description
-POST	/tasks	Create a new task (🔒 Requires JWT)
-GET	/tasks/:email	Get tasks for a user (🔒 Requires JWT)
-PATCH	/tasks/:id	Update a task (🔒 Requires JWT)
-DELETE	/tasks/:id	Delete a task (🔒 Requires JWT)
+### **Task API**  
+
+| Method  | Endpoint       | Description                          |
+|---------|--------------|--------------------------------------|
+| `POST`  | `/tasks`      | Create a new task (🔒 Requires JWT) |
+| `GET`   | `/tasks/:email` | Get tasks for a user (🔒 Requires JWT) |
+| `PATCH` | `/tasks/:id`  | Update a task (🔒 Requires JWT)     |
+| `DELETE` | `/tasks/:id`  | Delete a task (🔒 Requires JWT)     |
 ```
 
 ### Request Headers (for protected routes)
