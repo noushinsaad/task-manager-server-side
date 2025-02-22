@@ -68,6 +68,15 @@ async function run() {
         app.post('/tasks', verifyToken, async (req, res) => {
             const task = { ...req.body, createdAt: new Date() };
             const result = await taskCollection.insertOne(task);
+
+            await activityLogCollection.insertOne({
+                taskId: task._id,
+                message: `${task.title} added to ${task.status}`,
+                createdBy: task.createdBy,
+                updatedAt: new Date()
+            });
+
+
             res.send(result);
         });
 
@@ -112,7 +121,19 @@ async function run() {
 
         // Delete Task
         app.delete('/tasks/:id', verifyToken, async (req, res) => {
-            const result = await taskCollection.deleteOne({ _id: new ObjectId(req.params.id) });
+            const taskId = new ObjectId(req.params.id);
+            const query = { _id: taskId };
+
+            const task = await taskCollection.findOne(query);
+            const result = await taskCollection.deleteOne(query);
+
+            await activityLogCollection.insertOne({
+                taskId: task._id,
+                message: `${task.title} is deleted`,
+                createdBy: task.createdBy,
+                updatedAt: new Date()
+            });
+
             res.send(result);
         });
 
